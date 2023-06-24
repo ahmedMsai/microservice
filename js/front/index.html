@@ -13,7 +13,7 @@
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script>function addFlightRow(id){
-    $("body").append('<div id="flightrow'+id+'" class="flightrow"> <div class="centralLine"></div> <div class="flightProgressBar centralLine" id="flightProgressBar'+id+'"></div> <div class="from-to from" id="from'+id+'"></div> <div class="from-to to" id="to'+id+'"></div> <div class="flightpaneicon" id="flightprogressIcon'+id+'"><div class="flightModel" id="flightModel'+id+'"></div><div class="flightprogress" id="progress'+id+'"></div></div></div>')
+    $("body").append('<div id="flightrow'+id+'" class="flightrow"> <div class="centralLine"></div> <div class="flightProgressBar centralLine" id="flightProgressBar'+id+'"></div> <div class="from-to from" id="from'+id+'"></div> <div class="from-to to" id="to'+id+'"></div> <div class="flightpaneicon" id="flightprogressIcon'+id+'"><div class="flightModel" id="flightModel'+id+'"></div><div class="flightprogress" id="progress'+id+'"></div></div><div class="from-to-weather from" id="fromWheather'+id+'"></div><div class="from-to-weather to" id="toWheather'+id+'"></div></div>')
 }
 function update(data){
     data.forEach(trafic => {
@@ -51,8 +51,16 @@ function updateFlight(id){
         $("#from"+id).html(data.from)
         $("#to"+id).html(data.to)
         $("#flightModel"+id).html(data.model)
+        getWeather(data.from,"#fromWheather"+id)
+        getWeather(data.to,"#toWheather"+id)
     });
  }
+
+  function getWeather(id,divId){
+    $.get("http://localhost:8054/forecasts/" + id, function (data) {
+      $(divId).html(data.description)
+    });
+  }
  
 
 $( document ).ready(function() {
@@ -83,12 +91,13 @@ position: absolute;
 top: 20px;
 }
 .from-to{
-    position: absolute;
-    background-color: white;
-    top: 10px;
-    border: 2px solid red;
-    text-align: center;
-    width: 120px
+  position: absolute;
+  background-color: white;
+  top: -2px;
+  border: 2px solid red;
+  text-align: center;
+  width: 120px;
+  height: 50px;
 }
 .from{
     left: -120px;
@@ -123,6 +132,17 @@ top: 20px;
 .flightrow:hover .flightModel{
     display: block;
 }
+  .from-to-weather {position: absolute;
+    top: 21px;
+    text-align: center;
+    width: 115px;
+  }
+  .from-to-weather.from{
+    left: -115px;
+  }
+  .from-to-weather.to{
+    right: -115px;
+  }
 </style>
 </body>
 
