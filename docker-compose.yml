@@ -98,10 +98,23 @@ services:
       build: ./js/api
       ports:
         - "3000:3000"
-      hostname: trafic
+      hostname: trafic-service
       environment:
         - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=eureka-server
       image: trafic-service
+      depends_on:
+        - Eureka
+        - Mongo
+      command: "node ./server.js"
+    front-service:
+      container_name: front-service
+      build: ./js/front
+      ports:
+        - "3001:3001"
+      hostname: front-service
+      environment:
+        - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=eureka-server
+      image: front-service
       depends_on:
         - Eureka
         - Mongo

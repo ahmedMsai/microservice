@@ -1,0 +1,8 @@
+com\esprit\reservation\service\ReservationService.class
+com\esprit\reservation\service\ReservationServiceImpl.class
+com\esprit\reservation\model\Reservation.class
+com\esprit\reservation\repository\ReservationRepository.class
+com\esprit\reservation\config\SwaggerConfiguration.class
+com\esprit\reservation\controller\ReservationController.class
+com\esprit\reservation\ReservationServiceApplication.class
+com\esprit\reservation\exception\ReservationNotFoundException.class

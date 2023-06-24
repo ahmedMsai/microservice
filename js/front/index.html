@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Flight trafic</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  
+</head>
+
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script>function addFlightRow(id){
+    $("body").append('<div id="flightrow'+id+'" class="flightrow"> <div class="centralLine"></div> <div class="flightProgressBar centralLine" id="flightProgressBar'+id+'"></div> <div class="from-to from" id="from'+id+'"></div> <div class="from-to to" id="to'+id+'"></div> <div class="flightpaneicon" id="flightprogressIcon'+id+'"><div class="flightModel" id="flightModel'+id+'"></div><div class="flightprogress" id="progress'+id+'"></div></div></div>')
+}
+function update(data){
+    data.forEach(trafic => {
+        console.log(trafic._id)
+        if($("#flightProgressBar"+trafic.flightId).length){
+        }else{
+            addFlightRow(trafic.flightId)
+        }
+        console.log(trafic.progress+"%")
+        $("#flightProgressBar"+trafic.flightId).css("width",trafic.progress+"%")
+        $("#flightprogressIcon"+trafic.flightId).css("left",(10*trafic.progress)+"px")
+        $("#progress"+trafic.flightId).html(trafic.progress+"%")
+        if(trafic.progress>50){
+            $("#progress"+trafic.flightId).css("left","-42px")
+            $("#progress"+trafic.flightId).css("right","")
+        }else{
+            $("#progress"+trafic.flightId).css("right","-42px")
+            $("#progress"+trafic.flightId).css("left","")
+        
+        }
+        //document.getElementById("flightprogressIcon"+trafic.flightId).style.left=trafic.progress+"% !important"
+        updateFlight(trafic.flightId);
+    });
+    
+}
+function autUpdate() {
+    $.get( "http://localhost:3000/trafic", function( data ) {
+        update(JSON.parse(data))
+    });
+    setTimeout(autUpdate, 2000);
+ }
+
+function updateFlight(id){
+    $.get( "http://localhost:8054/flights/"+id, function( data ) {
+        $("#from"+id).html(data.from)
+        $("#to"+id).html(data.to)
+        $("#flightModel"+id).html(data.model)
+    });
+ }
+ 
+
+$( document ).ready(function() {
+    autUpdate();
+});</script>
+<style>
+  .flightrow{
+    width: 1050px;
+    position: relative;
+    height: 50px;
+    margin: auto;
+    margin-top: 10px;
+    border: 2px solid red;
+}
+.flightpaneicon{
+    width: 50px;
+height: 46px;
+position: absolute;
+background-image: url("https://w7.pngwing.com/pngs/237/184/png-transparent-airplane-icon-a5-computer-icons-black-plane-free-flight-airplane-flight-vehicle-transport.png");
+background-size: 100%;
+top: 0;
+}
+.centralLine{
+    width: 100%;
+height: 10px;
+background-color: black;
+position: absolute;
+top: 20px;
+}
+.from-to{
+    position: absolute;
+    background-color: white;
+    top: 10px;
+    border: 2px solid red;
+    text-align: center;
+    width: 120px
+}
+.from{
+    left: -120px;
+}
+.to{
+    right: -120px;
+}
+
+.flightprogress{
+    position: absolute;
+    top: 11px;
+    right: -42px;
+    background: white;
+    width: 42px;
+    height: 20px;
+}
+.flightProgressBar{
+    background-color: #66ff20 !important;
+}
+.flightModel{
+    width: 100px;
+    height: 28px;
+    background-color: black;
+    color: white;
+    top: 31px;
+    position: absolute;
+    left: 25px;
+    display: none;
+    text-align: center;
+}
+
+.flightrow:hover .flightModel{
+    display: block;
+}
+</style>
+</body>
+
+</html>

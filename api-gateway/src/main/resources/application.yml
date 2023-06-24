@@ -33,6 +33,10 @@ spring:
           uri: lb://forecast-service
           predicates:
             - Path=/forecasts/**
+        - id: front-service
+          uri: lb://front-service
+          predicates:
+            - Path=/UI/**
 eureka:
   instance:
     appname: ${spring.application.name}

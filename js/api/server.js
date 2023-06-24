@@ -36,6 +36,9 @@ app.get('/trafic', (req, res) => {
  app.post('/trafic', (req, res) => {
   traficControllerInst.add(req,res)
  })
+ app.post('/trafic/reset', (req, res) => {
+  traficControllerInst.resetTraficAndReturn(req,res)
+ })
 
 app.use(function (err, req, res, next) {
   console.log(err);
@@ -79,7 +82,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('MongoDB connected!');
   app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
- 
+  traficControllerInst.resetTrafic()
   var interval = setInterval(function(){ 
     traficControllerInst.updatePeriodic() 
   }, 2000);
