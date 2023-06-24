@@ -78,6 +78,21 @@ services:
       depends_on:
         - Eureka
         - configserver
+    forecast-service:
+      container_name: forecast-service
+      build: ./forecast-service
+      ports:
+        - "27015:27015"
+      hostname: forecast
+      environment:
+        - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+        - SPRING_CLOUD_CONFIG_URI=http://configserver:8888/
+
+      image: "forecast-service"
+      depends_on:
+        - Eureka
+        - configserver
+
     trafic-service:
       container_name: trafic-service
       build: ./js/api
