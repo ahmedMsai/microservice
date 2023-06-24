@@ -29,7 +29,10 @@ spring:
           uri: lb://trafic-service
           predicates:
             - Path=/trafic/**
-
+        - id: forecast-service
+          uri: lb://forecast-service
+          predicates:
+            - Path=/forecasts/**
 eureka:
   instance:
     appname: ${spring.application.name}
