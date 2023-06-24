@@ -1,6 +1,5 @@
 server:
   port: 8054
-
 spring:
   application:
     name: api-gateway
@@ -29,10 +28,14 @@ spring:
           uri: lb://trafic-service
           predicates:
             - Path=/trafic/**
+        - id: passenger-service
+          uri: lb://passenger-service
+          predicates:
+            - Path=/api/**
 
 eureka:
   instance:
     appname: ${spring.application.name}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eurekaserver:8761/eureka
