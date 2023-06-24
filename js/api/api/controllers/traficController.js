@@ -6,8 +6,8 @@ class traficController {
             then(trafics => {              
                 return res.end(JSON.stringify(trafics));
             }).
-            then(customers => {
-                console.log(JSON.stringify(trafics)); // 'B'
+            then(trafics => {
+                console.log(JSON.stringify(trafics));
             });
     }
     add(req,res){
@@ -15,9 +15,34 @@ class traficController {
         trafic.create({flightId:req.param('flightId'),progress:req.param('progress'),completed:req.param('completed')})
         return res.json("trafic added!")
     }
+    resetTraficAndReturn(req,res){
+        this.resetTrafic()
+        return res.json("trafic reset!")
+    }
+    resetTrafic(){
+        trafic.find({}).
+            then(trafics => {              
+                trafics.forEach(tr =>{
+                    tr.progress = Math.floor(Math.random() * 90) ;
+                    tr.save();
+                 });
+            }).
+            then(trafics => {
+                console.log("nothing found");
+            });
+    }
 
     updatePeriodic(){
-        //trafic.updateMany({}, { $inc: { progress: 5 } })
+        trafic.find({ progress: { $lt: 100 } }).
+            then(trafics => {              
+                trafics.forEach(tr =>{
+                    tr.progress = tr.progress +1 ;
+                    tr.save();
+                 });
+            }).
+            then(trafics => {
+                console.log(JSON.stringify(trafics));
+            });
         console.log("hello ahmed!")
     }
 }

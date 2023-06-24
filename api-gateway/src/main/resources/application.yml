@@ -29,6 +29,10 @@ spring:
           uri: lb://trafic-service
           predicates:
             - Path=/trafic/**
+        - id: front-service
+          uri: lb://front-service
+          predicates:
+            - Path=/UI/**
 
 eureka:
   instance:
